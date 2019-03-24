@@ -4,7 +4,7 @@
 #
 # See documentation in:
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-
+import scrapy
 from scrapy import signals
 import random
 import manga.settings as st
@@ -90,6 +90,17 @@ class MangaDownloaderMiddleware(object):
         # - return a Response object
         # - return a Request object
         # - or raise IgnoreRequest
+        print(response.status)
+        print(type(response.status))
+        if response.status != 200:
+            item = request.meta['item']
+            if request.url == item['image_url']:
+                url = item['image_url_on_error']
+                return scrapy.Request(url)
+            else:
+                print('\033[1;33;40m')
+                print(response)
+                print('\033[0m')
         return response
 
     def process_exception(self, request, exception, spider):
@@ -100,7 +111,10 @@ class MangaDownloaderMiddleware(object):
         # - return None: continue processing this exception
         # - return a Response object: stops process_exception() chain
         # - return a Request object: stops process_exception() chain
-        pass
+        print('\033[1;32;40m')
+        print(exception)
+        print('\033[0m')
+
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
