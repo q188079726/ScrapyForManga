@@ -30,7 +30,6 @@ class MangaPipeline(object):
                 response = requests.get(url,headers = header,timeout=5)
             except Exception as e:
                 print(e)
-            finally:
                 url = item['image_url_on_error']
                 print('\033[1;33;40m')
                 print('downloading:',url,'to:',file_name)
