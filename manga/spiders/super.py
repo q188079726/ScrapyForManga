@@ -16,9 +16,7 @@ def cleanWrongFiles(root_dir):
     if not os.path.exists(root_dir):
         return
     for episode_dir in os.listdir(root_dir):
-        print(episode_dir)
         x = root_dir + episode_dir+'/'
-        print(os.walk(x))
         if os.path.isdir(x):
             for files in os.listdir(x):
                 file_name = x+files
@@ -57,7 +55,6 @@ class SuperSpider(scrapy.Spider):
     def parseEpisodePage(self,response):
         item = response.meta['item']        
         image_url = response.xpath('//script[@type="text/javascript"]').re('mhurl="(.*?)"')[0]
-        index = image_url.split('/')[0]
         image_item = imageItem()
         image_item['image_url'] = self.image_base_url1+image_url
         image_item['image_url_on_error'] = self.image_base_url0+image_url
