@@ -98,7 +98,7 @@ class MangaDownloaderMiddleware(object):
                 url = item['image_url_on_error']
                 return scrapy.Request(url)
             else:
-                print('\033[1;33;40m')
+                print('\033[1;31;40m')
                 print(response)
                 print('\033[0m')
         return response
@@ -111,7 +111,7 @@ class MangaDownloaderMiddleware(object):
         # - return None: continue processing this exception
         # - return a Response object: stops process_exception() chain
         # - return a Request object: stops process_exception() chain
-        print('\033[1;32;40m')
+        print('\033[1;31;40m')
         print(exception)
         print('\033[0m')
 
