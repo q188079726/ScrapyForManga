@@ -4,26 +4,6 @@ import re
 import os
 from os.path import getsize
 from manga.items import episodeItem,imageItem
-import manga.settings as st
-
-def cleanLogs(log_path):
-    if not os.path.exists(log_path):
-        return
-    with open(log_path,'w') as f:
-        f.write('')
-
-def cleanWrongFiles(root_dir):
-    if not os.path.exists(root_dir):
-        return
-    for episode_dir in os.listdir(root_dir):
-        x = root_dir + episode_dir+'/'
-        if os.path.isdir(x):
-            for files in os.listdir(x):
-                file_name = x+files
-                print(file_name)
-                if os.path.isfile(file_name) and getsize(file_name) == 0:
-                    os.remove(file_name)
-                    print('removed:',file_name)
 
 class SuperSpider(scrapy.Spider):
     name = 'super'
@@ -31,12 +11,6 @@ class SuperSpider(scrapy.Spider):
     start_urls = ['http://manhua.fzdm.com/']
 
     def __init__(self):
-        self.root_dir = st.ROOT_DIR+self.name+'/'
-        self.exceptionlog = st.ROOT_DIR+self.name+st.LOG_FILE_NAME
-        print(self.root_dir)
-        if st.NEED_CLEAN_LOG == True:
-            cleanLogs(self.exceptionlog)
-        cleanWrongFiles(self.root_dir)
         self.image_base_url0 = 'http://p0.xiaoshidi.net/'
         self.image_base_url1 = 'http://p1.xiaoshidi.net/'
 
@@ -51,17 +25,18 @@ class SuperSpider(scrapy.Spider):
             item['page_number'] = 'index_0.html' 
             yield scrapy.Request(url,meta={'item':item},callback=self.parseEpisodePage)
             
-
     def parseEpisodePage(self,response):
-        item = response.meta['item']        
-        image_url = response.xpath('//script[@type="text/javascript"]').re('mhurl="(.*?)"')[0]
+        item = response.meta['item']   
         image_item = imageItem()
+     
+        image_url = response.xpath('//script[@type="text/javascript"]').re('mhurl="(.*?)"')[0]
+        
+        image_item['dir_name'] = item['dir_name']
         image_item['image_url'] = self.image_base_url1+image_url
         image_item['image_url_on_error'] = self.image_base_url0+image_url
-        image_item['image_path'] = self.root_dir+item['dir_name']+'/'
-        image_item['page_number'] = item['page_number']
+        image_item['page_number'] = re.search(r'index_(.*)\.html',item['page_number']).group(1) +'.jpg'
+        
         yield image_item
-
 
         nextPage = response.xpath('//link[@rel="prefetch"]/@href').extract()
         if nextPage: 
@@ -72,5 +47,3 @@ class SuperSpider(scrapy.Spider):
             new_item['page_number'] = pagenumber
             url = item['link_url']+nextPage[0]
             yield scrapy.Request(url,meta={'item':new_item},callback=self.parseEpisodePage)
-
-

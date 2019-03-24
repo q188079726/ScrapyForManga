@@ -18,7 +18,9 @@ class episodeItem(scrapy.Item):
 class imageItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
+    dir_name = scrapy.Field()
     image_url = scrapy.Field()
     image_url_on_error = scrapy.Field()
-    image_path = scrapy.Field()
     page_number = scrapy.Field()
+
+

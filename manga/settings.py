@@ -17,7 +17,7 @@ NEWSPIDER_MODULE = 'manga.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36'
+USER_AGENT = ['Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36']
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -66,7 +66,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'manga.pipelines.MangaPipeline': 300,
+   'manga.pipelines.MyImagesPipeline': 1,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -99,7 +99,4 @@ DOWNLOAD_TIMEOUT = 100
 #    {'ipaddr':'110.52.235.94:9999'},
 #    {'ipaddr':'112.87.71.202:9999'}
 # ]
-
-ROOT_DIR = os.path.join(os.path.expanduser("~"), 'Pictures/')
-LOG_FILE_NAME = '_ExceptionLog.txt'
-NEED_CLEAN_LOG = False
+IMAGES_STORE = os.path.join(os.path.expanduser("~"), 'Pictures','onepiece')
