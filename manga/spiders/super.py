@@ -37,8 +37,8 @@ class SuperSpider(scrapy.Spider):
         if st.NEED_CLEAN_LOG == True:
             cleanLogs(self.exceptionlog)
         cleanWrongFiles(self.root_dir)
-        self.image_base_url0 = 'http://p0.xiaoshidi.net/'
-        self.image_base_url1 = 'http://p1.xiaoshidi.net/'
+        self.image_base_url0 = 'http://www-mipengine-org.mipcdn.com/i/p1.manhuapan.com/'
+        self.image_base_url1 = 'http://www-mipengine-org.mipcdn.com/i/p2.manhuapan.com/'
 
     def parse(self,response):
         link_urls = response.xpath('//li[@class="pure-u-1-2 pure-u-lg-1-4"]/a/@href').extract()
